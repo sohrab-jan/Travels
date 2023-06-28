@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\TravelController as AdminTravelController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\TourController;
 use App\Http\Controllers\Api\V1\TravelController;
 use Illuminate\Http\Request;
@@ -26,3 +28,9 @@ Route::prefix('travels')->controller(TravelController::class)->group(function ()
 Route::prefix('travels/{travel:slug}/tours')->controller(TourController::class)->group(function (){
     Route::get('/','index')->name('tours.index');
 });
+
+Route::prefix('/admin')->middleware(['auth:sanctum','role:admin'])->controller(AdminTravelController::class)->group(function (){
+    Route::post('/travels','store');
+});
+
+Route::post('/login',LoginController::class);
