@@ -15,7 +15,7 @@ class TourListRequest extends FormRequest
             'price_from' => ['numeric'],
             'price_to' => ['numeric'],
             'sort_by' => [Rule::in(['price'])],
-            'sort_order' => [Rule::in(['desc','asc'])],
+            'sort_order' => [Rule::in(['desc', 'asc'])],
         ];
     }
 
@@ -26,9 +26,9 @@ class TourListRequest extends FormRequest
 
     public function messages()
     {
-       return[
-           'sort_by' => "The 'sort_by' parameter accepts only 'price' value",
-           'sort_order' => "The 'sort_order' parameter accepts only 'asc' or 'desc' value",
-       ];
+        return [
+            'sort_by' => "The 'sort_by' parameter accepts only 'price' value",
+            'sort_order' => "The 'sort_order' parameter accepts only 'asc' or 'desc' value",
+        ];
     }
 }

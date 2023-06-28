@@ -11,19 +11,19 @@ class LoginController extends Controller
 {
     public function __invoke(LoginRequest $request)
     {
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if (!$user || Hash::check($request->password , $user->password)){
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
-                'error' => 'The provided credentials are incorrect'
-            ],422);
+                'error' => 'The provided credentials are incorrect',
+            ], 422);
         }
 
-        $device = substr($request->userAgent() ?? '',0,2555);
+        $device = substr($request->userAgent() ?? '', 0, 2555);
 
         return response()->json([
-            'token' => $user->createToken($device)->plainTextToken
-        ],200);
+            'token' => $user->createToken($device)->plainTextToken,
+        ], 200);
 
     }
 }

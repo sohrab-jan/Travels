@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class TravelResource extends JsonResource
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -22,6 +22,6 @@ class TravelResource extends JsonResource
             'description' => $this->description,
             'number_of_days' => $this->number_of_days,
             'number_of_nights' => $this->number_of_nights,
-            ];
+        ];
     }
 }

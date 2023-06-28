@@ -15,7 +15,7 @@ class TravelFactory extends Factory
             'name' => $this->faker->name,
             'is_public' => $this->faker->boolean,
             'description' => $this->faker->text(100),
-            'number_of_days' => rand(1,9),
+            'number_of_days' => rand(1, 9),
         ];
     }
 }

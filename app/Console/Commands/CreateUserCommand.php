@@ -22,32 +22,35 @@ class CreateUserCommand extends Command
         $user['email'] = $this->ask('Email of the new user');
         $user['password'] = $this->secret('Password of the new user');
 
-        $roleName = $this->choice('Role of the new user',['Admin','Editor'],1);
-        $role = Role::where('name',$roleName)->first();
+        $roleName = $this->choice('Role of the new user', ['Admin', 'Editor'], 1);
+        $role = Role::where('name', $roleName)->first();
 
-        if (!$role){
+        if (! $role) {
             $this->info('Role not found');
+
             return -1;
         }
-        $validator = Validator::make($user,[
-            'name' => ['required','string','max:255'],
-            'email' => ['required','string','max:255','unique:'.User::class],
-            'password' => ['required',Password::default()],
+        $validator = Validator::make($user, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255', 'unique:'.User::class],
+            'password' => ['required', Password::default()],
         ]);
 
-        if ($validator->fails()){
-            foreach ($validator->errors()->all() as $error){
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return -1;
         }
 
-        DB::transaction(function ()use ($user,$role){
-            $user['password']= Hash::make($user['password']);
+        DB::transaction(function () use ($user, $role) {
+            $user['password'] = Hash::make($user['password']);
             $newUser = User::create($user);
             $newUser->roles()->attach($role->id);
         });
         $this->info('User '.$user['email'].' created successfully');
+
         return 0;
     }
 }

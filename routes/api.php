@@ -22,15 +22,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('travels')->controller(TravelController::class)->group(function (){
-    Route::get('/','index')->name('travels.index');
+Route::prefix('travels')->controller(TravelController::class)->group(function () {
+    Route::get('/', 'index')->name('travels.index');
 });
-Route::prefix('travels/{travel:slug}/tours')->controller(TourController::class)->group(function (){
-    Route::get('/','index')->name('tours.index');
-});
-
-Route::prefix('/admin')->middleware(['auth:sanctum','role:admin'])->controller(AdminTravelController::class)->group(function (){
-    Route::post('/travels','store');
+Route::prefix('travels/{travel:slug}/tours')->controller(TourController::class)->group(function () {
+    Route::get('/', 'index')->name('tours.index');
 });
 
-Route::post('/login',LoginController::class);
+Route::prefix('/admin')->middleware(['auth:sanctum', 'role:Admin'])->controller(AdminTravelController::class)->group(function () {
+    Route::post('/travels', 'store')->name('travels.store');
+});
+
+Route::post('/login', LoginController::class)->name('login');
