@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Role;
+use App\Models\Travel;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -52,5 +53,30 @@ class AdminTravelControllerTest extends TestCase
         $response->assertStatus(201);
         $response = $this->get(route('travels.index'));
         $response->assertJsonFragment(['name' => 'Travel name']);
+    }
+
+    public function test_updates_travel_successfully_with_valid_data()
+    {
+        $this->seed(RoleSeeder::class);
+        $user = User::factory()->create();
+        $travel = Travel::factory()->create();
+        $user->roles()->attach(Role::where('name', 'Editor')->value('id'));
+
+        $response = $this->actingAs($user)->putJson(route('travels.update', $travel), [
+            'name' => 'Travel name',
+        ]);
+
+        $response->assertStatus(422);
+
+        $response = $this->actingAs($user)->putJson(route('travels.update', $travel), [
+            'name' => 'Travel name updated',
+            'is_public' => 1,
+            'description' => 'some description',
+            'number_of_days' => 5,
+        ]);
+
+        $response->assertStatus(200);
+        $response = $this->get(route('travels.index'));
+        $response->assertJsonFragment(['name' => 'Travel name updated']);
     }
 }
